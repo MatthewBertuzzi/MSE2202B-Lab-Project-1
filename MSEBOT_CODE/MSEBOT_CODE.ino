@@ -35,6 +35,8 @@ I2CEncoder encoder_LeftMotor;
 //#define DEBUG_LINE_TRACKER_CALIBRATION
 //#define DEBUG_MOTOR_CALIBRATION
 
+int counter = 0;
+
 boolean bt_Motors_Enabled = true;
 
 //port pin constants
@@ -352,31 +354,44 @@ void loop()
 
         if(ui_Left_Line_Tracker_Dark<512){
 
-          if (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light){
-            ui_Left_Motor_Speed = 1600;
-            ui_Right_Motor_Speed = 1600;
-            Serial.println("DLStraight");
+         switch(counter){
+
+          case 0:{
+
+          while(!((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light))){
+            RobotForward();
           }
 
-          else{
-            if(ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light){
-              ui_Left_Motor_Speed = 1500;
-              ui_Right_Motor_Speed = 1650;
-            }
-
-            else if(ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light){
-              ui_Left_Motor_Speed = 1650;
-              ui_Right_Motor_Speed = 1500;
-            }
+          if ((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
+            ReverseRobot();
           }
 
-          if ((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-            ui_Left_Motor_Speed = 1500;
-            ui_Right_Motor_Speed = 1500;
+          
+          break;
+          }//case0end
+
+         case 1:{
+          SpinBackCCW();
+          Serial.println(counter);
+          break;
+         }//case1 end
+
+         case 2:{
+          while(!((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light))){
+            RobotForward();
           }
+            counter = 3;
+            break;
+          }
+         
 
+          default:{
+            
+          }
+          
 
-
+         
+    }//switch end
 
 
 
@@ -723,4 +738,90 @@ void Ping()
   Serial.println(ul_Echo_Time/58); //divide time by 58 to get distance in cm 
 #endif
 }  
+
+void ReverseRobot(){
+
+  while(!((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light))){
+
+    ui_Left_Line_Tracker_Data = analogRead(ci_Left_Line_Tracker);
+    ui_Middle_Line_Tracker_Data = analogRead(ci_Middle_Line_Tracker);
+    ui_Right_Line_Tracker_Data = analogRead(ci_Right_Line_Tracker);
+    
+    if ((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
+            ui_Left_Motor_Speed = 1400;
+            ui_Right_Motor_Speed = 1400;
+           Serial.println("Backwards1"); 
+    }
+    
+    if(ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light){
+      ui_Left_Motor_Speed = 1400;
+      ui_Right_Motor_Speed = 1400;
+      Serial.println("Backwards2"); 
+    }
+
+    else{
+      if(ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light){
+        ui_Left_Motor_Speed = 1400;
+        ui_Right_Motor_Speed = 1500;
+        Serial.println("BackwardsAdjustleft"); 
+      }
+
+      else if(ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light){
+        ui_Left_Motor_Speed = 1500;
+        ui_Right_Motor_Speed = 1400;
+        Serial.println("BackwardsAdjustRight"); 
+      }
+    }
+
+    servo_LeftMotor.writeMicroseconds(ui_Left_Motor_Speed);
+    servo_RightMotor.writeMicroseconds(ui_Right_Motor_Speed);
+    
+  }
+  Serial.println("EXIT"); 
+  counter = 1;  
+}
+
+void SpinBackCCW(){
+    ui_Left_Motor_Speed = 1400;
+    ui_Right_Motor_Speed = 1500;
+    servo_LeftMotor.writeMicroseconds(ui_Left_Motor_Speed);
+    servo_RightMotor.writeMicroseconds(ui_Right_Motor_Speed);
+  while(!(ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light)){
+    ui_Left_Line_Tracker_Data = analogRead(ci_Left_Line_Tracker);
+  }
+  counter = 2; //counter goes to 2
+}
+
+void RobotForward(){
+
+  ui_Left_Line_Tracker_Data = analogRead(ci_Left_Line_Tracker);
+  ui_Middle_Line_Tracker_Data = analogRead(ci_Middle_Line_Tracker);
+  ui_Right_Line_Tracker_Data = analogRead(ci_Right_Line_Tracker);
+  
+  if (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light){
+            ui_Left_Motor_Speed = 1575;
+            ui_Right_Motor_Speed = 1575;
+          }
+
+          else{
+            if(ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light){
+              ui_Left_Motor_Speed = 1500;
+              ui_Right_Motor_Speed = 1650;
+            }
+
+            else if(ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light){
+              ui_Left_Motor_Speed = 1650;
+              ui_Right_Motor_Speed = 1500;
+            }
+          }
+
+          servo_LeftMotor.writeMicroseconds(ui_Left_Motor_Speed);
+          servo_RightMotor.writeMicroseconds(ui_Right_Motor_Speed);
+
+          /*if ((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
+            ui_Left_Motor_Speed = 1500;
+            ui_Right_Motor_Speed = 1500;
+          }*/
+}
+
 
