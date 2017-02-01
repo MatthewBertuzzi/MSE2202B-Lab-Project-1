@@ -304,52 +304,6 @@ void loop()
         ui_Middle_Line_Tracker_Light = 512;
         ui_Right_Line_Tracker_Light = 512;
         
-        //DRIVING ON LIGHT LINE BELOW
-        if(ui_Left_Line_Tracker_Dark>512){
-        
-        if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1700;
-          ui_Right_Motor_Speed = 1700;
-          Serial.println("Straight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1700;
-          ui_Right_Motor_Speed = 1550;
-          Serial.println("TurnRight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1700;
-          ui_Right_Motor_Speed = 1550;
-          Serial.println("TurnRight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1550;
-          ui_Right_Motor_Speed = 1700;
-          Serial.println("TurnLeft");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1600;
-          ui_Right_Motor_Speed = 1600;
-          Serial.println("Straight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1550;
-          ui_Right_Motor_Speed = 1700;
-          Serial.println("TurnLeft");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1500;
-          ui_Right_Motor_Speed = 1500;
-          Serial.println("3Dark");
-        }
-
-        }
         //DRIVING ON DARK LINE BELOW
 
         if(ui_Left_Line_Tracker_Dark<512){
@@ -393,65 +347,6 @@ void loop()
          
     }//switch end
 
-
-
-
-          
-/*
-        Serial.println("BackgroundValue");
-        Serial.println(ui_Left_Line_Tracker_Dark);
-
-        if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1500;
-          ui_Right_Motor_Speed = 1500;
-          Serial.println("Dark line Stop");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1550;
-          ui_Right_Motor_Speed = 1700;
-          Serial.println("DLTurnLeft");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1550;
-          
-          ui_Right_Motor_Speed = 1700;
-          Serial.println("DLTurnLeft");
-        }
-
-        else if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1700;
-          ui_Right_Motor_Speed = 1550;
-          Serial.println("DLTurnRight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data <= ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1650;
-          ui_Right_Motor_Speed = 1650;
-          Serial.println("DLStraight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1700;
-          ui_Right_Motor_Speed = 1550;
-          Serial.println("DLTurnRight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data <= ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data <= ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1650;
-          ui_Right_Motor_Speed = 1650;
-          Serial.println("DLStraight");
-        }
-
-        else if((ui_Left_Line_Tracker_Data > ui_Left_Line_Tracker_Light) && (ui_Middle_Line_Tracker_Data > ui_Middle_Line_Tracker_Light) && (ui_Right_Line_Tracker_Data > ui_Right_Line_Tracker_Light)){
-          ui_Left_Motor_Speed = 1650;
-          ui_Right_Motor_Speed = 1650;
-          Serial.println("DL3Dark");
-          
-        }
-
-*/
         }
 
         
